@@ -21,10 +21,10 @@ describe 'Request', ->
       expect(request).to.be.an.instanceof Request
 
     it 'should return same request when same oauth2 object passed in', ->
-      expect(Request.getRequest(oauth2)).to.equal request
+      expect(Request.getRequest(oauth2)).to.deep.equal request
 
     it 'should return different request when different oauth2 object passed in', ->
-      expect(Request.getRequest(anotherOAuth)).to.not.equal request
+      expect(Request.getRequest(anotherOAuth)).to.not.deep.equal request
 
   describe 'GET', ->
     request = Request.getRequest(anotherOAuth)
