@@ -12,25 +12,19 @@ describe 'Request', ->
     expires_in: 604800
     refresh_token: "67ba52d727aad69c372ef885770083d4"
 
-  request = Request.getRequest(oauth2)
-  anotherRequest = Request.getRequest(anotherOAuth)
-
 
   describe "Initialzation", ->
+
+    request = Request.getRequest(oauth2)
 
     it 'should return an instance of Request class', ->
       expect(request).to.be.an.instanceof Request
 
     it 'should return same request when same oauth2 object passed in', ->
-      expect(Request.getRequest(oauth2)).to.equal request
+      expect(Request.getRequest(oauth2)).to.deep.equal request
 
     it 'should return different request when different oauth2 object passed in', ->
-      expect(Request.getRequest(anotherOAuth)).to.not.equal request
-
-    it "should return the existing request when no parameters passed in", ->
-      anotherRequest = Request.getRequest(anotherOAuth)
-      expect(Request.getRequest()).to.equal anotherRequest
-
+      expect(Request.getRequest(anotherOAuth)).to.not.deep.equal request
 
   describe 'GET', ->
     request = Request.getRequest(anotherOAuth)
