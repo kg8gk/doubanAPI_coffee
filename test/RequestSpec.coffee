@@ -1,9 +1,16 @@
 Request = require '../src/Request'
-{oauth2, anotherOAuth} = require '../douban_oauth'
+{oauth2} = require '../douban_oauth'
 chai = require 'chai'
-expect = chai.expect
+{expect} = chai
 
 describe 'Request', ->
+
+  anotherOAuth =
+    access_token: "2c926201f2ec32f385b72605d8c498d9"
+    douban_user_name: "阿渺同学纠结地"
+    douban_user_id: "51890723"
+    expires_in: 604800
+    refresh_token: "67ba52d727aad69c372ef885770083d4"
 
   describe "Initialzation", ->
 
@@ -19,20 +26,46 @@ describe 'Request', ->
       expect(Request.getRequest(anotherOAuth)).to.not.deep.equal request
 
   describe 'GET', ->
-    request = Request.getRequest(anotherOAuth)
+
+    request = Request.getRequest(oauth2)
     path = "/shuo/v2/statuses/home_timeline"
 
-    it 'should send correct GET request', (done) ->
-      request.get path, (data) ->
-        expect(data).to.have.length 20
-        done()
+    describe "callback", ->
 
-    it 'should send correct GET request with parameters', (done) ->
-      request.get path
-        , (data) ->
-            expect(data).to.have.length 1
-            done()
+      it 'should send correct GET request', (done) ->
+        request.get path, (error, data) ->
+          if error
+            throw new Error(error)
+            return
+          expect(JSON.parse(data)).to.have.length 20
+          done()
+
+      it 'should send correct GET request with parameters', (done) ->
+        request.get path, (error, data) ->
+          if error
+            throw new Error(error)
+            return
+          expect(JSON.parse(data)).to.have.length 1
+          done()
         , {count: 1}
+
+    describe "Promise", ->
+
+      it "should send correct GET request", (done) ->
+        request.qGet(path).then((data) ->
+          expect(JSON.parse(data)).to.have.length 20
+          done()
+        ).catch((e) ->
+          throw new Error(e)
+        )
+
+      it "should send correct GET request with parameters", (done) ->
+        request.qGet(path, count: 1).then((data) ->
+          expect(JSON.parse(data)).to.have.length 1
+          done()
+        ).catch((e) ->
+          throw new Error(e)
+        )
 
 #    it 'should raise an exception when error occurs', (done) ->
 #      oldRequest = Request.getRequest(oauth2)
