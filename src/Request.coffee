@@ -77,7 +77,8 @@ class Request
     @returns a newly created Request instance
     @private
   ###
-  constructor: (@oauth2) ->
+  constructor: (oauth2) ->
+    @_oauth2 = oauth2
 
   ###
     @name Reqeust.getRequest
@@ -108,24 +109,7 @@ class Request
   _defaultArgs: ->
     hostname: "api.douban.com"
     headers:
-      "Authorization": "Bearer #{@oauth2.access_token}"
-
-  ###
-    @name request._handleResponse
-    @private
-
-    @description It is used to receive the data, and use callback to handle the data
-    @param {Funciton} callback A callback to handle the ultimate data or error
-  ###
-  _handleResponse: (callback) ->
-    (res) ->
-      data = ""
-      res.on 'data', (chunk) ->
-        data += chunk
-      res.on 'end', ->
-        callback JSON.parse(data.toString())
-      res.on 'error', ->
-        callback (new Error("Something wrong with request"))
+      "Authorization": "Bearer #{@_oauth2.access_token}"
 
   ###
     @name request.get
@@ -138,7 +122,7 @@ class Request
     handlerObj =
       resolve: callback
       reject: callback
-    _makeGetRequest(handlerObj, @oauth2)(path, extraArgs)
+    _makeGetRequest(handlerObj, @_oauth2)(path, extraArgs)
 
   ###
     @name request.qGet
@@ -150,7 +134,7 @@ class Request
   ###
   qGet: (path, extraArgs) ->
     deferred = Q.defer()
-    _makeGetRequest(deferred, @oauth2)(path, extraArgs)
+    _makeGetRequest(deferred, @_oauth2)(path, extraArgs)
     deferred.promise
 
 exports = module.exports = Request
