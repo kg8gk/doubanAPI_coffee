@@ -1,7 +1,7 @@
 Request = require '../src/Request'
 {oauth2} = require '../douban_oauth'
 chai = require 'chai'
-expect = chai.expect
+{expect} = chai
 
 describe 'Request', ->
 
@@ -27,20 +27,46 @@ describe 'Request', ->
       expect(Request.getRequest(anotherOAuth)).to.not.deep.equal request
 
   describe 'GET', ->
-    request = Request.getRequest(anotherOAuth)
+
+    request = Request.getRequest(oauth2)
     path = "/shuo/v2/statuses/home_timeline"
 
-    it 'should send correct GET request', (done) ->
-      request.get path, (data) ->
-        expect(JSON.parse(data)).to.have.length 20
-        done()
+    describe "callback", ->
 
-    it 'should send correct GET request with parameters', (done) ->
-      request.get path
-        , (data) ->
-            expect(JSON.parse(data)).to.have.length 1
-            done()
+      it 'should send correct GET request', (done) ->
+        request.get path, (error, data) ->
+          if error
+            throw new Error(error)
+            return
+          expect(JSON.parse(data)).to.have.length 20
+          done()
+
+      it 'should send correct GET request with parameters', (done) ->
+        request.get path, (error, data) ->
+          if error
+            throw new Error(error)
+            return
+          expect(JSON.parse(data)).to.have.length 1
+          done()
         , {count: 1}
+
+    describe "Promise", ->
+
+      it "should send correct GET request", (done) ->
+        request.qGet(path).then((data) ->
+          expect(JSON.parse(data)).to.have.length 20
+          done()
+        ).catch((e) ->
+          throw new Error(e)
+        )
+
+      it "should send correct GET request with parameters", (done) ->
+        request.qGet(path, count: 1).then((data) ->
+          expect(JSON.parse(data)).to.have.length 1
+          done()
+        ).catch((e) ->
+          throw new Error(e)
+        )
 
 #    it 'should raise an exception when error occurs', (done) ->
 #      oldRequest = Request.getRequest(oauth2)

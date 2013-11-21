@@ -1,0 +1,1 @@
+exports.DoubanAPI = require './DoubanAPI'
