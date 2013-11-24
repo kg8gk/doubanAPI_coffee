@@ -1,5 +1,5 @@
 BroadcastAPI = require './BroadcastAPI'
-
+Request = require './Request'
 ###
   @name DoubanAPI
   @description A class that wraps all the api of Douban
@@ -11,6 +11,7 @@ class DoubanAPI
   constructor: (oauth) ->
     @_oauth = oauth
     @_apiCachePool = {}
+    @_request = Request.getRequest(oauth)
 
   ###
     @name doubanAPI.getBroadcastAPI
@@ -21,6 +22,6 @@ class DoubanAPI
   getBroadcastAPI: ->
     api = @_apiCachePool['broadcast']
     return api if api
-    @_apiCachePool['broadcast'] = api = new BroadcastAPI(@_oauth)
+    @_apiCachePool['broadcast'] = api = new BroadcastAPI(@_oauth, )
     api
 

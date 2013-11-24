@@ -25,6 +25,11 @@ describe 'Request', ->
     it 'should return different request when different oauth2 object passed in', ->
       expect(Request.getRequest(anotherOAuth)).to.not.deep.equal request
 
+    it "should access an douban token object", ->
+      fn = -> Request.getRequest({})
+      expect(fn).to.throw TypeError,
+        "Argument Error: A douban oauth2 object required"
+
   describe 'GET', ->
 
     request = Request.getRequest(oauth2)

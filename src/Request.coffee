@@ -2,6 +2,7 @@ https = require 'https'
 qs = require 'querystring'
 _ = require 'underscore'
 Q = require 'q'
+utils = require './utils'
 
 ###
   Helper functions begin
@@ -89,6 +90,8 @@ class Request
     @public
   ###
   @getRequest: (oauth2) ->
+    unless utils.isDoubanOAuthObject(oauth2)
+      throw new TypeError("Argument Error: A douban oauth2 object required")
     cacheObj = @cache[oauth2.douban_user_id] || {}
 
     # It same token exist, just return the cached request
