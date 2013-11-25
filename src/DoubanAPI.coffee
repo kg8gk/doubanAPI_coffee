@@ -16,7 +16,7 @@ class DoubanAPI
   ###
     @name doubanAPI.getBroadcastAPI
     @description Get the broadcast api
-    @returns {BroadcastAPI} Broadcast API
+    @returns {BroadcastAPI} Instance of BroadcastAPI
     @public
   ###
   getBroadcastAPI: ->

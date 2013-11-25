@@ -59,10 +59,10 @@ describe 'BroadcastAPI', ->
 
       describe "return values", ->
 
-        it "should return undefined for callback style", ->
+        it "should return undefined when a callback offered", ->
           expect(broadcastAPI.getHomeTimeline(undefined, ->)).to.be.undefined
 
-        it "should return Promise for promise style", ->
+        it "should return Promise when no callback offered", ->
           expect(Q.isPromise broadcastAPI.getHomeTimeline()).to.be.true
 
       describe "Callback style", ->

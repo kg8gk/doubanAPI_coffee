@@ -55,8 +55,6 @@ class BroadcastAPI
       throw new TypeError("undefined or Function required for the second parameter")
 
 
-
-
   ###
     Helper functions
   ###
