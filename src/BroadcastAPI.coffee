@@ -38,11 +38,21 @@ class BroadcastAPI
     @public
   ###
   getHomeTimeline: (paramObj, callback) ->
-    unless _.isFunction(callback)
+    unless _.isUndefined(paramObj) or utils.isPlainObject(paramObj)
+      throw new TypeError("undefined or plain object required for the first parameter")
+
+    if _.isFunction(callback)
+
       # Callback style strategy
       return @_getHomeTimelineByCallback(paramObj, callback)
-    # Promise style strategy
-    return @_getHomeTimelineByPromise(paramObj)
+    else if _.isUndefined(callback)
+
+      # Promise style strategy
+      return @_getHomeTimelineByPromise(paramObj)
+    else
+
+      # Can not accept parameters that are not funciton or undefined
+      throw new TypeError("undefined or Function required for the second parameter")
 
 
 

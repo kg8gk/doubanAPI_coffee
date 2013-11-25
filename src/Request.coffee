@@ -60,7 +60,9 @@ _makeGetRequest = (handlerObj, oauth2) ->
     req = https.get args, responseHandler
     req.on 'error', (e) ->
       handlerObj.reject e
+      return undefined
     req.end(null)
+    undefined
 
 ###
   Request class is used to wrap the https requests to douban.com
